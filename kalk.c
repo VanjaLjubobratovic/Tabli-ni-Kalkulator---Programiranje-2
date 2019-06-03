@@ -7,13 +7,22 @@ typedef struct Cell{
   char name[6];
   char equation[60];
   char operators[10]; //maybeeee
-  int val;
+  int val; //inicijaliziraj na -1 po mogucnosti
 }cell;
 
+void calculate_known(cell *cell_array, int index){
+  cell_array[index].val = atoi(cell_array[index].equation);
+  printf("%s = ", cell_array[index].name);
+  printf("%d\n", cell_array[index].val);
+}
 
 int calculate_value(cell *celija, int index){
   /*printf("USO ZA %d\n", index);
   printf("%s", celija->name);*/
+  
+ // if(strlen)
+  
+  
   return;
 }
 
@@ -24,8 +33,22 @@ void input_sheet(char *buffer, int n){
   
   for(int i = 0; i < n; i++){
     scanf(" %6[^=]", cell_array[i].name);
-    scanf(" %60[^\n]", cell_array[i].equation);
+    scanf("= %60[^\n]", cell_array[i].equation);
   }
+  
+  //popisivanje svih operatora u jednadzbi funkcije
+  
+  for(int i = 0; i < n; i++){
+    int k = 0;
+    for(int j = 0; j < strlen(cell_array[i].equation); j++){
+      if(cell_array[i].equation[j] == '+' || cell_array[i].equation[j] == '*' ||
+      cell_array[i].equation[j] == '/' || cell_array[i].equation[j] == '-'){
+        cell_array[i].operators[k] = cell_array[i].equation[j];
+        k++;
+      }
+    }
+  }
+
   
   /*iteriraj kroz polje celija te izracunaj vrijednost svih celija cija jednadzba
   ne sadrzi vrijednosti ostalih celija, zatim pomocu tih vrijednosti izracunaj ostale
@@ -41,10 +64,14 @@ void input_sheet(char *buffer, int n){
         break;
       }
     }
-    if(explicit)
-      cell_array[i].val = calculate_value(&cell_array[i], i);
+    
+    if(explicit && strlen(cell_array[i].operators) == NULL){
+      calculate_known(cell_array, i);
+    }
+    
+    /*if(explicit)  
+      cell_array[i].val = calculate_value(&cell_array[i], i);*/
   }
-  
   
   //free(cell_array);
 }
