@@ -6,6 +6,7 @@
 typedef struct Cell{
   char name[6];
   char equation[60];
+  char operators[10]; //maybeeee
   int val;
 }cell;
 
