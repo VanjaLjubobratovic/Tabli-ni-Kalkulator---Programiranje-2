@@ -16,11 +16,10 @@ void input_sheet(char *buffer, int n){
   cell *cell_array = malloc(n * sizeof(cell));
   
   for(int i = 0; i < n; i++){
-    scanf(" %200[^\n]", buffer);
-    //procitaj svaki red buffera do znaka '=' i popisi imena varijabli u strukture
-    sscanf(buffer, "%s", cell_array[i].name);
-    //popisi jednadzbe 
+    scanf(" %6[^=]", cell_array[i].name);
+    scanf(" %60[^\n]", cell_array[i].equation);
   }
+  
   
   /*iteriraj kroz polje celija te izracunaj vrijednost svih celija cija jednadzba
   ne sadrzi vrijednosti ostalih celija, zatim pomocu tih vrijednosti izracunaj ostale
@@ -41,7 +40,7 @@ int main() {
   //i < n; 1 je samo za testne svrhe
   for(int i = 0; i < 1; i++){
     scanf("%d", &n);
-    buffer = malloc(n * 200 * sizeof(char));
+    buffer = malloc((n + 1) * sizeof(char));
     input_sheet(buffer, n);
     //dodaj pozive funkcija za obradu 
     free(buffer);
