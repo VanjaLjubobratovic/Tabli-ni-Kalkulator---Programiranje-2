@@ -33,7 +33,7 @@ void sort_cells(cell *cell_array, int n){
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void print_cells(cell *cell_array, int n){
   for(int i = 0; i < n; i++){
-    printf("%s = %d\n", cell_array[i].name, cell_array[i].val);
+    printf("%s = %s\n", cell_array[i].name, cell_array[i].equation);
   }
 }
 
@@ -53,13 +53,35 @@ void calculate_known(cell *cell_array, int index){
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void calculate_value(cell *cell_array, int index){
   
-  int nums[30], j = 1;
+  int nums[100] = {0}, j = 0;
   
   //mice operatore iz jednadzbe
   for(int i = 0; i < strlen(cell_array[index].equation); i++){
     if(ispunct(cell_array[index].equation[i]))
       cell_array[index].equation[i] = ' ';
   }
+  
+  //cisti razmake
+  int i, x;
+  for(i=x=0; cell_array[index].equation[i]; ++i)
+    if(!isspace(cell_array[index].equation[i]) || (i > 0 && !isspace(cell_array[index].equation[i - 1])))
+      cell_array[index].equation[x++] = cell_array[index].equation[i];
+    cell_array[index].equation[x] = '\0';
+  
+  //popisivanje operatora u niz cijelih brojeva
+  for(int i = 0; i < strlen(cell_array[index].equation); i++){
+    if(isdigit(cell_array[index].equation[i])){
+      nums[j] = nums[j] * 10 + cell_array[index].equation[i] - '0';
+    }
+    if(isspace(cell_array[index].equation[i])){
+      j++;
+    }
+  }
+  
+  for(int i = 0; i < strlen(cell_array[index].operators); i++){
+    
+  }
+  
   
 }
 
