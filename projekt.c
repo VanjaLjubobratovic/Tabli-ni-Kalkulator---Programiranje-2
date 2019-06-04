@@ -5,7 +5,7 @@
 #include <math.h>
 
 typedef struct{
-  char name[10];
+  char name[6];
   char equation[200];
   int solved;
   int val;
