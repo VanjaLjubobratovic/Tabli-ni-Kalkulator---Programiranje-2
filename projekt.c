@@ -252,7 +252,6 @@ void input_sheet(int n){
     for (int i = 0; i < n; ++i){
 			if(cell_array[i].solved){
 				num_solved++;
-				printf("SOLVED : %d\n", num_solved);
 			}
 		}
   }
