@@ -1,5 +1,0 @@
-TO DO:
-
-1. Pronadji algoritam za racunanje jednadzbi s prioritetom operatora
-
-2. osmisli funkciju za iteriranje kroz polje celija
