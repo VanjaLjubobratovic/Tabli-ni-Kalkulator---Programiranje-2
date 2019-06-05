@@ -9,6 +9,7 @@ typedef struct{
   char equation[200];
   int solved;
   int val;
+  int already_known;
 }cell;
 
 
@@ -136,15 +137,18 @@ void calculate_value(cell *cell_array, int index, int n){
   
   int offset = 0, count;
   char operand1[10], operand2[10], buffer[10], rez_str[10];
-  int op1, op2, rez, num_op = 0;
+  int op1, op2, rez;
   
-  for(int i = 0; i < strlen(cell_array[index].equation); i++){
-  	if(cell_array[index].equation[i] == '/' || cell_array[index].equation[i] == '*' || cell_array[index].equation[i] == '-' || cell_array[index].equation[i] == '+')
-  	num_op++;
-  }
+ /* for(int i = 0; i < strlen(cell_array[index].equation); i++){
+  	if(cell_array[index].equation[i] == '/' || cell_array[index].equation[i] == '*' || cell_array[index].equation[i] == '-' || cell_array[index].equation[i] == '+'){
+  		num_op = 1;
+  		printf("YES\n");
+  		break;
+	  }
+  }*/
   
   //AKO NEMA MATEMATICKIH OPERACIJA PRESKACE OVAJ WHILE
-  if(!num_op)
+  if(cell_array[index].already_known)
   	goto NO_UNKNOWNS;
   
   
@@ -264,6 +268,16 @@ void input_sheet(int n){
     cell_array[i].name[strlen(cell_array[i].name) - 1] = '\0';
     cell_array[i].solved = 0;
     cell_array[i].val = 0;
+    cell_array[i].already_known = 1;
+	}
+	
+	for(int i = 0; i < n; i++){
+		for(int j = 0; j < strlen(cell_array[i].equation); j++){
+			if(cell_array[i].equation[j] == '/' || cell_array[i].equation[j] == '*' || cell_array[i].equation[j] == '-' || cell_array[i].equation[j] == '+'){
+				cell_array[i].already_known = 0;
+				break;
+			}
+		}
 	}
 	
 	//printf("EQUATION: %s\n", cell_array[0].equation);
