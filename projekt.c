@@ -124,9 +124,9 @@ int is_num(char *string){
 		if(isdigit(string[i])){
 			continue;
 		}
-		return 1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 
