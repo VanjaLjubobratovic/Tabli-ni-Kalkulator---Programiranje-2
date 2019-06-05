@@ -12,7 +12,7 @@ typedef struct{
 }cell;
 
 
-//PROVJERAVA JE LI VARIJABLA
+//PROVJERAVA JE LI PROCITANI DIO JEDNADZBE VARIJABLA
 /////////////////////////////////////////////////////////////////////////////////////////////////
 int is_var(char *string){
   int is = 0;
@@ -27,7 +27,7 @@ int is_var(char *string){
 
 
 
-//IZBACUJE NEPOTREBNE RAZMAKE
+//IZBACUJE NEPOTREBNE RAZMAKE I OSTAVLJA SAMO JEDAN IZMEDJU SVAKOG OPERATORA I OPERANDA
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void one_space(cell *cell_array, int index){
   int i, j;
@@ -58,7 +58,7 @@ void sort_cells(cell *cell_array, int n){
 
 
 
-//FUNKCIJA ZA ISPIS SVIH VARIJABLI NA LISTU
+//FUNKCIJA ZA ISPIS SVIH VARIJABLI NA JEDNOM LISTU
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void print_cells(cell *cell_array, int n){
   for(int i = 0; i < n; i++){
@@ -86,10 +86,10 @@ int find_operator(char *oper){
 
 //IZRACUNAVANJE VRIJEDNOSTI VARIJABLE BEZ OPERATORA I NEPOZNANICA
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void calculate_known(cell *cell_array, int index){
+/*void calculate_known(cell *cell_array, int index){
   cell_array[index].val = atoi(cell_array[index].equation);
   cell_array[index].solved = 1;
-}
+}*/
 
 
 //PRONALAZI VARIJABLU PO IMENU TE AKO JE IZRACUNATA VRACA VRIJEDNOST
@@ -116,6 +116,9 @@ int is_solved(cell *cell_array, char key[], int n){
 }
 
 
+
+//PROVJERAVA JE LI PROCITANI STRING BROJ
+/////////////////////////////////////////////////////////////////////////////////////////////////
 int is_num(char *string){
 	for(int i = 0; i < strlen(string); i++){
 		if(isdigit(string[i])){
@@ -135,6 +138,9 @@ void calculate_value(cell *cell_array, int index, int n){
   int offset = 0, count;
   char operand1[10], operand2[10], buffer[10], rez_str[10];
   int op1, op2, rez;
+  
+  
+  //MNOZENJE I DIJELJENJE
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
     if(find_operator(buffer) == 3 || find_operator(buffer) == 4){
@@ -159,6 +165,7 @@ void calculate_value(cell *cell_array, int index, int n){
       if(find_operator(buffer) == 3) rez = op1 * op2;
       if(find_operator(buffer) == 4) rez = op1 / op2;
       
+      //PREBRISUJE DIO JEDNADZBE KOJEG JE FUNKCIJA IZRACUNALA, UMECE REZULTAT TE CISTI NEPOTREBNE RAZMAKE
       sprintf(rez_str, "%d", rez);
       for(int i = 0; i < strlen(buffer) + strlen(operand1) + strlen(operand2) + 2; ++i){
         cell_array[index].equation[offset + i - strlen(operand1) - strlen(buffer)] = ' ';
@@ -173,6 +180,9 @@ void calculate_value(cell *cell_array, int index, int n){
     strcpy(operand1, buffer);
   }
   offset = 0;
+  
+  
+  //ZBRAJANJE I ODUZIMANJE
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
     if(find_operator(buffer) == 1 || find_operator(buffer) == 2){
@@ -197,6 +207,7 @@ void calculate_value(cell *cell_array, int index, int n){
       if(find_operator(buffer) == 1) rez = op1 + op2;
       if(find_operator(buffer) == 2) rez = op1 - op2;
       
+      //PREBRISUJE DIO JEDNADZBE KOJEG JE FUNKCIJA IZRACUNALA, UMECE REZULTAT TE CISTI NEPOTREBNE RAZMAKE
       sprintf(rez_str, "%d", rez);
       for(int i = 0; i < strlen(buffer) + strlen(operand1) + strlen(operand2) + 2; ++i){
         cell_array[index].equation[offset + i - strlen(operand1) - strlen(buffer)] = ' ';
@@ -212,6 +223,8 @@ void calculate_value(cell *cell_array, int index, int n){
   }
   offset = 0;
   
+  
+  //RACUNANJE VRIJEDNOSTI CELIJE U SLUCAJU DA SE JEDNADZBA SASTOJI SAMO OD JEDNOG BROJA ILI NEPOZNANICE
   sscanf(cell_array[index].equation, " %s", buffer);
   if(is_var(buffer)){
     if(is_solved(cell_array, buffer, n)){
@@ -238,6 +251,8 @@ void input_sheet(int n){
   for(int i = 0; i < n; i++){
     scanf(" %6[^=]", cell_array[i].name);
     scanf("= %200[^\n]", cell_array[i].equation);
+    cell_array[i].solved = 0;
+    cell_array[i].val = 0;
   }
 
   do{
@@ -250,7 +265,7 @@ void input_sheet(int n){
     
     num_solved = 0;
     for (int i = 0; i < n; ++i){
-			if(cell_array[i].solved){
+		if(cell_array[i].solved){
 				num_solved++;
 			}
 		}
