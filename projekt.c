@@ -6,7 +6,7 @@
 
 typedef struct{
   char name[6];
-  char equation[200];
+  char equation[400];
   int solved;
   int val;
   int already_known;
@@ -196,6 +196,7 @@ void calculate_value(cell *cell_array, int index, int n){
   
   
   //ZBRAJANJE I ODUZIMANJE
+  //printf("TU\n");
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
   	//printf("BUFFER: %s\n", buffer);
@@ -261,11 +262,16 @@ void input_sheet(int n){
   
   cell *cell_array = malloc(400 * sizeof(cell));
   int num_solved = 0;
+  char help[3];
   
   for(int i = 0; i < n; i++){
-    scanf(" %6[^=]", cell_array[i].name);
-    scanf("= %200[^\n]", cell_array[i].equation);
-    cell_array[i].name[strlen(cell_array[i].name) - 1] = '\0';
+    scanf(" %6[^' ']", cell_array[i].name);
+    scanf(" %s", help);
+   // printf("%s\n", help);
+    fgets(cell_array[i].equation, 400, stdin);
+    //scanf(" = %400[^\n]", cell_array[i].equation);
+    /*printf("#%s#\n", cell_array[i].name);
+    printf("%s\n", cell_array[i].equation);*/
     cell_array[i].solved = 0;
     cell_array[i].val = 0;
     cell_array[i].already_known = 1;
