@@ -108,7 +108,7 @@ int find_var(cell *cell_array, char key[], int n){
 int is_solved(cell *cell_array, char key[], int n){
   for(int i = 0; i < n; i++){
     if(strcmp(cell_array[i].name, key) == 0){
-        if(cell_array[i].solved == 0)
+        if(cell_array[i].solved)
           return 1;
     }
   }
