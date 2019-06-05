@@ -134,7 +134,6 @@ int is_num(char *string){
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void calculate_value(cell *cell_array, int index, int n){
   
-  
   int offset = 0, count;
   char operand1[10], operand2[10], buffer[10], rez_str[10];
   int op1, op2, rez;
@@ -142,7 +141,7 @@ void calculate_value(cell *cell_array, int index, int n){
   
   //MNOZENJE I DIJELJENJE
   
-  while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
+  while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){  //INFINITE
     if(find_operator(buffer) == 3 || find_operator(buffer) == 4){
       sscanf(cell_array[index].equation + offset + strlen(buffer), " %s", operand2);
       if(is_var(operand1)){
@@ -255,7 +254,6 @@ void input_sheet(int n){
     cell_array[i].val = 0;
 	}
 	
-		
   do{
 	for(int i = 0; i < n; i++){
     if(cell_array[i].solved)
