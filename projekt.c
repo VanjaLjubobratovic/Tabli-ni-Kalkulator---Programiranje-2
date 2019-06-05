@@ -44,7 +44,6 @@ void one_space(cell *cell_array, int index){
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void sort_cells(cell *cell_array, int n){
   cell tmp;
-  
   for(int i = 0; i < n; i++){
     for(int j = 1; j < n; j++){
       if(strcmp(cell_array[j - 1].name, cell_array[j].name) > 0){
@@ -64,6 +63,7 @@ void print_cells(cell *cell_array, int n){
   for(int i = 0; i < n; i++){
     printf("%s = %d\n", cell_array[i].name, cell_array[i].val);
   }
+  
   printf("\n");
 }
 
@@ -97,7 +97,7 @@ int find_operator(char *oper){
 int find_var(cell *cell_array, char key[], int n){
   for(int i = 0; i < n; i++){
     if(strcmp(cell_array[i].name, key) == 0){
-        return cell_array[i].val;
+    	return cell_array[i].val;
     }
   }
   return 0;
@@ -253,24 +253,22 @@ void input_sheet(int n){
     scanf("= %200[^\n]", cell_array[i].equation);
     cell_array[i].solved = 0;
     cell_array[i].val = 0;
-  }
-
+	}
+	
+		
   do{
-    
-    for(int i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
     if(cell_array[i].solved)
       continue;
     else calculate_value(cell_array, i, n);
+	}
     
-    
-    num_solved = 0;
-    for (int i = 0; i < n; ++i){
-		if(cell_array[i].solved){
+	num_solved = 0;
+	for (int i = 0; i < n; ++i){
+		if(cell_array[i].solved)
 				num_solved++;
 			}
-		}
-  }
-} while(num_solved < n);
+	} while(num_solved < n);
   
   
   sort_cells(cell_array, n);
