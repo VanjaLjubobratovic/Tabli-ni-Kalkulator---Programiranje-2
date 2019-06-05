@@ -143,12 +143,13 @@ void calculate_value(cell *cell_array, int index, int n){
   	num_op++;
   }
   
+  //AKO NEMA MATEMATICKIH OPERACIJA PRESKACE OVAJ WHILE
   if(!num_op)
   	goto NO_UNKNOWNS;
   
   
   //MNOZENJE I DIJELJENJE
-  printf("SOLVING: %s = %s\n", cell_array[index].name, cell_array[index].equation);
+  //printf("SOLVING: %s = %s\n", cell_array[index].name, cell_array[index].equation);
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){  //INFINITE
     if(find_operator(buffer) == 3 || find_operator(buffer) == 4){
@@ -193,7 +194,7 @@ void calculate_value(cell *cell_array, int index, int n){
   //ZBRAJANJE I ODUZIMANJE
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
-  	printf("BUFFER: %s\n", buffer);
+  	//printf("BUFFER: %s\n", buffer);
     if(find_operator(buffer) == 1 || find_operator(buffer) == 2){
       sscanf(cell_array[index].equation + offset + strlen(buffer), " %s", operand2);
       if(is_var(operand1)){
@@ -260,6 +261,7 @@ void input_sheet(int n){
   for(int i = 0; i < n; i++){
     scanf(" %6[^=]", cell_array[i].name);
     scanf("= %200[^\n]", cell_array[i].equation);
+    cell_array[i].name[strlen(cell_array[i].name) - 1] = '\0';
     cell_array[i].solved = 0;
     cell_array[i].val = 0;
 	}
@@ -285,6 +287,8 @@ void input_sheet(int n){
   
   sort_cells(cell_array, n);
   print_cells(cell_array, n);
+  
+  //printf("Cell solved: %s %d", cell_array[0].name, cell_array[0].solved);
   
   free(cell_array);
 }
