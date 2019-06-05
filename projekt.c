@@ -84,15 +84,6 @@ int find_operator(char *oper){
 }
 
 
-
-//IZRACUNAVANJE VRIJEDNOSTI VARIJABLE BEZ OPERATORA I NEPOZNANICA
-/////////////////////////////////////////////////////////////////////////////////////////////////
-/*void calculate_known(cell *cell_array, int index){
-  cell_array[index].val = atoi(cell_array[index].equation);
-  cell_array[index].solved = 1;
-}*/
-
-
 //PRONALAZI VARIJABLU PO IMENU TE AKO JE IZRACUNATA VRACA VRIJEDNOST
 /////////////////////////////////////////////////////////////////////////////////////////////////
 int find_var(cell *cell_array, char key[], int n){
@@ -103,6 +94,7 @@ int find_var(cell *cell_array, char key[], int n){
   }
   return 0;
 }
+
 
 //TRAZI VARIJABLU PO IMENU TE PROVJERAVA JE LI RIJESENA
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,22 +131,12 @@ void calculate_value(cell *cell_array, int index, int n){
   char operand1[10], operand2[10], buffer[10], rez_str[10];
   int op1, op2, rez;
   
- /* for(int i = 0; i < strlen(cell_array[index].equation); i++){
-  	if(cell_array[index].equation[i] == '/' || cell_array[index].equation[i] == '*' || cell_array[index].equation[i] == '-' || cell_array[index].equation[i] == '+'){
-  		num_op = 1;
-  		printf("YES\n");
-  		break;
-	  }
-  }*/
-  
   //AKO NEMA MATEMATICKIH OPERACIJA PRESKACE OVAJ WHILE
   if(cell_array[index].already_known)
   	goto NO_UNKNOWNS;
   
   
   //MNOZENJE I DIJELJENJE
-  //printf("SOLVING: %s = %s\n", cell_array[index].name, cell_array[index].equation);
-  
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){  //INFINITE
     if(find_operator(buffer) == 3 || find_operator(buffer) == 4){
       sscanf(cell_array[index].equation + offset + strlen(buffer), " %s", operand2);
@@ -178,7 +160,7 @@ void calculate_value(cell *cell_array, int index, int n){
       if(find_operator(buffer) == 3) rez = op1 * op2;
       if(find_operator(buffer) == 4) rez = op1 / op2;
       
-      //PREBRISUJE DIO JEDNADZBE KOJEG JE FUNKCIJA IZRACUNALA, UMECE REZULTAT TE CISTI NEPOTREBNE RAZMAKE
+      //ZAMJENJUJE IZRACUNATI DIO JEDNADZBE SA REZULTATOM
       sprintf(rez_str, "%d", rez);
       for(int i = 0; i < strlen(buffer) + strlen(operand1) + strlen(operand2) + 2; ++i){
         cell_array[index].equation[offset + i - strlen(operand1) - strlen(buffer)] = ' ';
@@ -196,10 +178,7 @@ void calculate_value(cell *cell_array, int index, int n){
   
   
   //ZBRAJANJE I ODUZIMANJE
-  //printf("TU\n");
-  
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
-  	//printf("BUFFER: %s\n", buffer);
     if(find_operator(buffer) == 1 || find_operator(buffer) == 2){
       sscanf(cell_array[index].equation + offset + strlen(buffer), " %s", operand2);
       if(is_var(operand1)){
@@ -222,7 +201,7 @@ void calculate_value(cell *cell_array, int index, int n){
       if(find_operator(buffer) == 1) rez = op1 + op2;
       if(find_operator(buffer) == 2) rez = op1 - op2;
       
-      //PREBRISUJE DIO JEDNADZBE KOJEG JE FUNKCIJA IZRACUNALA, UMECE REZULTAT TE CISTI NEPOTREBNE RAZMAKE
+      //ZAMJENJUJE IZRACUNATI DIO JEDNADZBE SA REZULTATOM
       sprintf(rez_str, "%d", rez);
       for(int i = 0; i < strlen(buffer) + strlen(operand1) + strlen(operand2) + 2; ++i){
         cell_array[index].equation[offset + i - strlen(operand1) - strlen(buffer)] = ' ';
@@ -264,19 +243,19 @@ void input_sheet(int n){
   int num_solved = 0;
   char help[3];
   
+  
+  //UNOS 
   for(int i = 0; i < n; i++){
     scanf(" %6[^' ']", cell_array[i].name);
     scanf(" %s", help);
-   // printf("%s\n", help);
     fgets(cell_array[i].equation, 400, stdin);
-    //scanf(" = %400[^\n]", cell_array[i].equation);
-    /*printf("#%s#\n", cell_array[i].name);
-    printf("%s\n", cell_array[i].equation);*/
     cell_array[i].solved = 0;
     cell_array[i].val = 0;
     cell_array[i].already_known = 1;
 	}
 	
+	
+	//PETLJA ZA ODREDJIVANJE JEDNADZBI KOJA NE SADRZI MATEMATICKE OPERACIJE
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < strlen(cell_array[i].equation); j++){
 			if(cell_array[i].equation[j] == '/' || cell_array[i].equation[j] == '*' || cell_array[i].equation[j] == '-' || cell_array[i].equation[j] == '+'){
@@ -286,7 +265,6 @@ void input_sheet(int n){
 		}
 	}
 	
-	//printf("EQUATION: %s\n", cell_array[0].equation);
 	
   do{
 	for(int i = 0; i < n; i++){
@@ -301,21 +279,17 @@ void input_sheet(int n){
 				num_solved++;
 			}
 	} while(num_solved < n);
-	
-	//printf("find_var(AXC3) = %d\n", find_var(cell_array, "AXC3", n));
-  
+	 
   
   sort_cells(cell_array, n);
   print_cells(cell_array, n);
-  
-  //printf("Cell solved: %s %d", cell_array[0].name, cell_array[0].solved);
   
   free(cell_array);
 }
 
 
 
-
+//MAIN
 /////////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
   int t, n;
