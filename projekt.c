@@ -136,10 +136,19 @@ void calculate_value(cell *cell_array, int index, int n){
   
   int offset = 0, count;
   char operand1[10], operand2[10], buffer[10], rez_str[10];
-  int op1, op2, rez;
+  int op1, op2, rez, num_op = 0;
+  
+  for(int i = 0; i < strlen(cell_array[index].equation); i++){
+  	if(cell_array[index].equation[i] == '/' || cell_array[index].equation[i] == '*' || cell_array[index].equation[i] == '-' || cell_array[index].equation[i] == '+')
+  	num_op++;
+  }
+  
+  if(!num_op)
+  	goto NO_UNKNOWNS;
   
   
   //MNOZENJE I DIJELJENJE
+  printf("SOLVING: %s = %s\n", cell_array[index].name, cell_array[index].equation);
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){  //INFINITE
     if(find_operator(buffer) == 3 || find_operator(buffer) == 4){
@@ -184,6 +193,7 @@ void calculate_value(cell *cell_array, int index, int n){
   //ZBRAJANJE I ODUZIMANJE
   
   while(sscanf(cell_array[index].equation + offset, " %[^' '] %n", buffer, &count) > 0){
+  	printf("BUFFER: %s\n", buffer);
     if(find_operator(buffer) == 1 || find_operator(buffer) == 2){
       sscanf(cell_array[index].equation + offset + strlen(buffer), " %s", operand2);
       if(is_var(operand1)){
@@ -222,7 +232,7 @@ void calculate_value(cell *cell_array, int index, int n){
   }
   offset = 0;
   
-  
+  NO_UNKNOWNS: 
   //RACUNANJE VRIJEDNOSTI CELIJE U SLUCAJU DA SE JEDNADZBA SASTOJI SAMO OD JEDNOG BROJA ILI NEPOZNANICE
   sscanf(cell_array[index].equation, " %s", buffer);
   if(is_var(buffer)){
@@ -254,6 +264,8 @@ void input_sheet(int n){
     cell_array[i].val = 0;
 	}
 	
+	//printf("EQUATION: %s\n", cell_array[0].equation);
+	
   do{
 	for(int i = 0; i < n; i++){
     if(cell_array[i].solved)
@@ -267,6 +279,8 @@ void input_sheet(int n){
 				num_solved++;
 			}
 	} while(num_solved < n);
+	
+	//printf("find_var(AXC3) = %d\n", find_var(cell_array, "AXC3", n));
   
   
   sort_cells(cell_array, n);
